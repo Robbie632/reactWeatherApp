@@ -1,0 +1,35 @@
+
+#forecast-description {
+  flex:1;
+}
+#forecast-image {
+  flex: 2;
+}
+
+#current-wind {
+  flex:1;
+}
+#current-temp {
+  flex:1;
+}
+#current-rain {
+  flex:1;
+}
+#wind-graph {
+  flex:1;
+}
+#temp-graph {
+  flex:1;
+}
+#rain-graph {
+  flex:1;
+}
+
+#column-1 {
+  flex:1;
+}
+#column-2 {
+  flex: 2;
+}
+
+
