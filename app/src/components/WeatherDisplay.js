@@ -2,25 +2,17 @@ import { Component } from "react";
 import "../style/display.css";
 import "../style/weatherdisplay.css";
 import { fetchWeatherApi } from "openmeteo";
-import weatherCodes from "../utils/weatherCodes";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  ResponsiveContainer,
-} from "recharts";
+import weatherCodes from "../configs/weatherCodes.js";
+import Tile from "./Tile.js";
+import Graph from "./Graph.js";
 import { WiStrongWind } from "react-icons/wi";
 import { WiThermometer } from "react-icons/wi";
-import { IconContext } from "react-icons";
 import { WiRain } from "react-icons/wi";
+import { PiTree } from "react-icons/pi";
+import { GiHighGrass } from "react-icons/gi";
 import { IoInformationCircleOutline } from "react-icons/io5";
 
 class WeatherDisplay extends Component {
-  // make this function
-  // convert states to single variables usng useState
-  // convert api calls to useEffect
   constructor(props) {
     super(props);
     this.state = {
@@ -28,26 +20,39 @@ class WeatherDisplay extends Component {
       wind: "loading...",
       rain: "loading...",
       weatherCode: "loading...",
+      treePollen: "loading...",
+      grassPollen: "loading...",
       daily: [],
     };
+    const lat = 51.454514;
+    const long = -2.58791;
+    const timezone = "GMT";
 
     this.api_params = {
-      latitude: 51.454514,
-      longitude: -2.58791,
+      latitude: lat,
+      longitude: long,
       current: [
         "temperature_2m",
         "precipitation_probability",
         "wind_speed_10m",
-        "weather_code"
+        "weather_code",
       ],
       daily: [
         "temperature_2m_max",
         "precipitation_probability_max",
-        "wind_speed_10m_max"
+        "wind_speed_10m_max",
       ],
-      timezone: "GMT",
+      timezone: timezone,
     };
+    this.airQualityAPIParams = {
+      latitude: lat,
+      longitude: long,
+      current: ["birch_pollen", "alder_pollen", "grass_pollen"],
+    };
+
     this.url = "https://api.open-meteo.com/v1/forecast";
+    this.airQualityURL =
+      "https://air-quality-api.open-meteo.com/v1/air-quality";
   }
 
   setTemp = (newValue) => {
@@ -65,11 +70,33 @@ class WeatherDisplay extends Component {
   setWeatherCode = (newValue) => {
     this.setState((prev) => ({ ...prev, weatherCode: newValue }));
   };
+  setTreePollen = (newValue) => {
+    this.setState((prev) => ({ ...prev, treePollen: newValue }));
+  };
+  setGrassPollen = (newValue) => {
+    this.setState((prev) => ({ ...prev, grassPollen: newValue }));
+  };
   range = (start, stop, step) => {
     return Array.from(
       { length: (stop - start) / step },
       (_, i) => start + i * step
     );
+  };
+  getPollen = async () => {
+    try {
+      const responses = await fetchWeatherApi(
+        this.airQualityURL,
+        this.airQualityAPIParams
+      );
+      const response = responses[0];
+      const current = response.current();
+      const treePollen =
+        (current.variables(0).value() + current.variables(1).value()) / 2;
+      this.setTreePollen(treePollen);
+      this.setGrassPollen(current.variables(2).value());
+    } catch (error) {
+      console.log(`error getting pollen: ${error}`);
+    }
   };
 
   getWeather = async () => {
@@ -88,7 +115,7 @@ class WeatherDisplay extends Component {
           rain: current.variables(1).value(),
           windSpeed10m: current.variables(2).value(),
           temperature2m: current.variables(0).value(),
-          weatherCode: daily.variables(3).value()
+          weatherCode: daily.variables(3).value(),
         },
         daily: {
           time: this.range(
@@ -100,7 +127,7 @@ class WeatherDisplay extends Component {
           precipitationProbabilityMax: Array.from(
             daily.variables(1).valuesArray()
           ),
-          windSpeed10mMax: daily.variables(2).valuesArray()
+          windSpeed10mMax: daily.variables(2).valuesArray(),
         },
       };
 
@@ -123,16 +150,16 @@ class WeatherDisplay extends Component {
       this.setRain(weatherData.current.rain);
       this.setTemp(weatherData.current.temperature2m);
       this.setWind(weatherData.current.windSpeed10m);
-      this.setWeatherCode(weatherData.current.weatherCode)
+      this.setWeatherCode(weatherData.current.weatherCode);
       this.setDaily(dailyParsed);
     } catch (error) {
       console.log(error);
     }
   };
 
-
   componentDidMount() {
-    setTimeout(this.getWeather, 1000);
+    setTimeout(this.getPollen, 2000);
+    setTimeout(this.getWeather, 2000);
   }
 
   render() {
@@ -141,147 +168,103 @@ class WeatherDisplay extends Component {
     const graphMargins = { top: 20, right: 30, left: 35, bottom: 0 };
 
     return (
-      <div className="container-0">
-        <div className="column" id="column-1">
-        <div className="current-tile tile" id="description">
-            <IconContext.Provider
-              value={{
-                size: "4em",
-                color: "#3B67EB",
-                className: "global-class-name",
-              }}
-            >
-               <IoInformationCircleOutline/>
-            </IconContext.Provider>
-            <br></br>
-            <div>
-              {weatherCodes[this.state.weatherCode] == undefined ? this.state.weatherCode : weatherCodes[this.state.weatherCode]}
+      <div id="first-container">
+        <div className="container-0">
+          <div className="column" id="column-1">
+            <Tile
+              icon={<IoInformationCircleOutline />}
+              value={
+                weatherCodes[this.state.weatherCode] === undefined
+                  ? this.state.weatherCode
+                  : weatherCodes[this.state.weatherCode]
+              }
+            />
+            <Tile
+              icon={<WiThermometer />}
+              value={
+                typeof this.state.temp == "string"
+                  ? this.state.temp
+                  : Math.round(this.state.temp)
+              }
+              unit={<span>&#8451;</span>}
+            />
+            <Tile
+              icon={<WiRain />}
+              value={
+                typeof this.state.rain == "string"
+                  ? this.state.rain
+                  : Math.round(this.state.rain)
+              }
+              unit={"%"}
+            />
+            <Tile
+              icon={<WiStrongWind />}
+              value={
+                typeof this.state.rain == "string"
+                  ? this.state.rain
+                  : Math.round(this.state.rain)
+              }
+              unit={"kph"}
+            />
+            <div id="container-2">
+              <Tile
+                icon={<PiTree />}
+                value={
+                  typeof this.state.treePollen == "string"
+                    ? this.state.treePollen
+                    : Math.round(this.state.treePollen)
+                }
+                unit={""}
+              />
+              <Tile
+                icon={<GiHighGrass />}
+                value={
+                  typeof this.state.grassPollen == "string"
+                    ? this.state.grassPollen
+                    : Math.round(this.state.grassPollen)
+                }
+                unit={""}
+                iconSize="3.2em"
+              />
             </div>
           </div>
-          <div className="current-tile tile" id="current-temp">
-            <IconContext.Provider
-              value={{
-                size: "4em",
-                color: "#3B67EB",
-                className: "global-class-name",
-              }}
-            >
-              <WiThermometer />
-            </IconContext.Provider>
-            <br></br>
-            <div>
-              {typeof this.state.temp == "string"
-                ? this.state.temp
-                : Math.round(this.state.temp)}{" "}
-              <span>&#8451;</span>
-            </div>
-          </div>
-          <div className="current-tile tile" id="current-rain">
-            <IconContext.Provider
-              value={{
-                size: "4em",
-                color: "#3B67EB",
-                className: "global-class-name",
-              }}
-            >
-              <WiRain />
-            </IconContext.Provider>
-            <br></br>
-            <div>
-              {typeof this.state.rain == "string"
-                ? this.state.rain
-                : Math.round(this.state.rain)}{" "}
-              %
-            </div>
-          </div>
-          <div className="current-tile tile" id="current-wind">
-            <IconContext.Provider
-              value={{
-                size: "4em",
-                color: "#3B67EB",
-                className: "global-class-name",
-              }}
-            >
-              <WiStrongWind />
-            </IconContext.Provider>
-            <br></br>
-            <div>
-              {typeof this.state.wind == "string"
-                ? this.state.wind
-                : Math.round(this.state.wind)}{" "}
-              kph
-            </div>
-          </div>
-        </div>
-        <div className="column" id="column-2">
-          <div className="tile graph-tile" id="temp-graph">
-            <ResponsiveContainer width={graphWidth} height={graphHeight}>
-              <LineChart
-                margin={graphMargins}
-                data={this.state.daily.map(({ time, temperature2mMax }) => ({
+          <div className="column" id="column-2">
+            <Graph
+              graphHeight={graphHeight}
+              graphWidth={graphWidth}
+              graphMargins={graphMargins}
+              yLabel={"temp (C)"}
+              data={this.state.daily.map(({ time, temperature2mMax }) => ({
+                name: time,
+                temp: temperature2mMax,
+              }))}
+              dataName="temp"
+            />
+            <Graph
+              graphHeight={graphHeight}
+              graphWidth={graphWidth}
+              graphMargins={graphMargins}
+              yLabel={"max prob. rain"}
+              data={this.state.daily.map(
+                ({ time, precipitationProbabilityMax }) => ({
                   name: time,
-                  temp: temperature2mMax,
-                }))}
-              >
-                <XAxis dataKey="name"></XAxis>
-
-                <YAxis
-                  label={{
-                    value: "temp (C)",
-                    angle: -90,
-                    position: "insideBottomLeft",
-                  }}
-                ></YAxis>
-                <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
-                <Line type="monotone" dataKey="temp" stroke="#3B67EB" />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-          <div className="tile graph-tile" id="rain-graph">
-            <ResponsiveContainer width={graphWidth} height={graphHeight}>
-              <LineChart
-                margin={graphMargins}
-                data={this.state.daily.map(
-                  ({ time, precipitationProbabilityMax }) => ({
-                    name: time,
-                    rain: precipitationProbabilityMax,
-                  })
-                )}
-              >
-                <XAxis dataKey="name" />
-                <YAxis
-                  label={{
-                    value: "max. prob. rain",
-                    angle: -90,
-                    position: "insideBottomLeft",
-                  }}
-                />
-                <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
-                <Line type="monotone" dataKey="rain" stroke="#3B67EB" />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-          <div className="tile graph-tile" id="wind-graph">
-            <ResponsiveContainer width={graphWidth} height={graphHeight}>
-              <LineChart
-                margin={graphMargins}
-                data={this.state.daily.map(({ time, windSpeed10mMax }) => ({
-                  name: time,
-                  wind: windSpeed10mMax,
-                }))}
-              >
-                <XAxis dataKey="name" />
-                <YAxis
-                  label={{
-                    value: "wind (kph)",
-                    angle: -90,
-                    position: "insideBottomLeft",
-                  }}
-                />
-                <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
-                <Line type="monotone" dataKey="wind" stroke="#3B67EB" />
-              </LineChart>
-            </ResponsiveContainer>
+                  rain: precipitationProbabilityMax,
+                })
+              )}
+              domain={[0, 100]}
+              dataName="rain"
+            />
+            <Graph
+              graphHeight={graphHeight}
+              graphWidth={graphWidth}
+              graphMargins={graphMargins}
+              yLabel={"wind (kph)"}
+              data={this.state.daily.map(({ time, windSpeed10mMax }) => ({
+                name: time,
+                wind: windSpeed10mMax,
+              }))}
+              dataName="wind"
+            />
           </div>
         </div>
       </div>

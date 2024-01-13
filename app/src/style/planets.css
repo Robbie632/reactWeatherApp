@@ -1,0 +1,28 @@
+#map-container {
+  display: flex;
+  flex-direction: row;
+  height:100vh;
+  width:100%;
+  align-items: center;
+  justify-content: center;
+  background-color: #C8D9E6;
+}
+#planets-map {
+  width: 640px;
+  height: 640px;
+  border-radius: 320px;
+  background-color: #15354D;
+  z-index: 0;
+  position: absolute;
+  display: flex;
+}
+.planet {
+  z-index: 1;
+  position: absolute;
+  border: 2px solid black;
+}
+.planet-name {
+  z-index: 1;
+  position: absolute;
+}
+

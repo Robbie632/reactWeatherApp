@@ -1,16 +1,15 @@
 import './App.css';
 import WeatherDisplay from "./components/WeatherDisplay";
 import ScreenSaver from './components/ScreenSaver';
+import Planets from './components/Planets.js';
 import config from './config.js';
 import React, { useState, useEffect } from "react";
 
-const dashboards = ["screensaver", "weather"]
+const dashboards = ["screensaver",  "planets", "weather"]
 
 function App() {
-  // what dashboard to display
 
-
-  const [displayIndex, setDisplayIndex] = useState(0);
+  const [displayIndex, setDisplayIndex] = useState(1);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -31,7 +30,8 @@ function App() {
     <div className="App">
       {
         dashboards[displayIndex] === "screensaver" ? <ScreenSaver /> :
-        dashboards[displayIndex] === "weather" ? <WeatherDisplay /> :
+          dashboards[displayIndex] === "weather" ? <WeatherDisplay /> :
+          dashboards[displayIndex] === "planets" ? <Planets /> :
         "other"}
     </div>
   );
