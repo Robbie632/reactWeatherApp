@@ -1,11 +1,10 @@
 import './App.css';
 import WeatherDisplay from "./components/WeatherDisplay";
-import ScreenSaver from './components/ScreenSaver';
 import Planets from './components/Planets.js';
 import config from './config.js';
 import React, { useState, useEffect } from "react";
 
-const dashboards = ["screensaver",  "planets", "weather"]
+const dashboards = ["planets", "weather"]
 
 function App() {
 
@@ -29,7 +28,6 @@ function App() {
   return (
     <div className="App">
       {
-        dashboards[displayIndex] === "screensaver" ? <ScreenSaver /> :
           dashboards[displayIndex] === "weather" ? <WeatherDisplay /> :
           dashboards[displayIndex] === "planets" ? <Planets /> :
         "other"}
