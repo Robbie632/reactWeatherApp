@@ -8,7 +8,7 @@ const planetsConfig = {
     radius: 25,
   },
   mercury: {
-    color: "dark-red",
+    color: "#55090D",
     radius: 30,
   },
   venus: {
