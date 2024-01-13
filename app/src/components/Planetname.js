@@ -1,4 +1,4 @@
-export function PlanetName({ mapRadius, x, y, color, planetName }) {
+export function PlanetName({ mapRadius, x, y, color, planetName, opacity, borderStyle }) {
   const height = 40;
   const width = 100;
 
@@ -10,6 +10,8 @@ export function PlanetName({ mapRadius, x, y, color, planetName }) {
         width: width,
         backgroundColor: color,
         borderRadius: 8,
+        borderColor:"white",
+        borderStyle: borderStyle,
         zIndex: 1,
         bottom: mapRadius - height / 2 + x,
         left: mapRadius - width / 2 + y,
@@ -18,6 +20,7 @@ export function PlanetName({ mapRadius, x, y, color, planetName }) {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
+        opacity: opacity
       }}
     >
       <div>{planetName}</div>

@@ -5,13 +5,13 @@
   width:100%;
   align-items: center;
   justify-content: center;
-  background-color: #C8D9E6;
+  background-color: black;
 }
 #planets-map {
-  width: 640px;
-  height: 640px;
-  border-radius: 320px;
-  background-color: #15354D;
+  width: 620px;
+  height: 620px;
+  border-radius: 310px;
+  background-color: #156951;
   z-index: 0;
   position: absolute;
   display: flex;

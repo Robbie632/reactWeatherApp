@@ -1,4 +1,4 @@
-export function Planet({ mapRadius, planetRadius, x, y, color }) {
+export function Planet({ mapRadius, planetRadius, x, y, color, opacity }) {
   return (
     <div
       className="planet"
@@ -10,7 +10,7 @@ export function Planet({ mapRadius, planetRadius, x, y, color }) {
         zIndex: 1,
         bottom: mapRadius - planetRadius + x,
         left: mapRadius - planetRadius + y,
-        opacity: 0.8,
+        opacity: opacity,
       }}
     ></div>
   );

@@ -4,15 +4,18 @@ import planetsConfig from "../configs/planetsConfig";
 import { Planet } from "./planet";
 import { PlanetName } from "./Planetname";
 import { CardinalPoint } from "./CardinalPoint";
-import { degreesToRadians, polarToCartesian } from "../utils/planetEquations";
+import {
+  degreesToRadians,
+  polarToCartesian,
+  getRandomInt,
+} from "../utils/planetEquations";
 
 import React, { useState, useEffect } from "react";
-
 
 function Planets() {
   const lat = 51.454514;
   const long = -2.58791;
-  const mapRadius = 320;
+  const mapRadius = 310;
 
   const [planets, setPlanets] = useState([{}]);
 
@@ -22,16 +25,17 @@ function Planets() {
       try {
         const response = await fetch(url);
         const data = await response.json();
-        const visible = data["data"].filter(
-          ({ nakedEyeObject }) => nakedEyeObject
+
+        const parsedPlanets = data["data"].map(
+          ({ name, altitude, azimuth, nakedEyeObject }) => {
+            return {
+              planetName: name.toLowerCase(),
+              altitude: altitude,
+              azimuth: azimuth,
+              visible: nakedEyeObject,
+            };
+          }
         );
-        const parsedPlanets = visible.map(({ name, altitude, azimuth }) => {
-          return {
-            planetName: name.toLowerCase(),
-            altitude: altitude,
-            azimuth: azimuth,
-          };
-        });
         setPlanets(parsedPlanets);
       } catch (error) {
         console.log("error calling planets api");
@@ -40,29 +44,35 @@ function Planets() {
     setTimeout(fetchData, 1000);
   }, []);
 
-  const planetElements = planets.map(({ planetName, altitude, azimuth }) => {
-    if (planetsConfig[planetName] === undefined) {
-      return;
+  const planetElements = planets.map(
+    ({ planetName, altitude, azimuth, visible }) => {
+      if (planetsConfig[planetName] === undefined) {
+        return;
+      }
+      const { x, y } = polarToCartesian(
+        mapRadius,
+        degreesToRadians(azimuth)
+      );
+
+      return (
+        <Planet
+          mapRadius={mapRadius}
+          planetRadius={planetsConfig[planetName].radius}
+          x={x}
+          y={y}
+          color={planetsConfig[planetName].color}
+          opacity={ visible ? 0.8 : 0.3}
+        />
+      );
     }
-    const { x, y } = polarToCartesian(mapRadius, degreesToRadians(azimuth));
+  );
 
-    return (
-      <Planet
-        mapRadius={mapRadius}
-        planetRadius={planetsConfig[planetName].radius}
-        x={x}
-        y={y}
-        color={planetsConfig[planetName].color}
-      />
-    );
-  });
-
-  const planetNames = planets.map(({ planetName, altitude, azimuth }) => {
+  const planetNames = planets.map(({ planetName, altitude, azimuth, visible }) => {
     if (planetsConfig[planetName] === undefined) {
       return;
     }
     const { x, y } = polarToCartesian(
-      mapRadius + 80,
+      mapRadius + 50,
       degreesToRadians(azimuth)
     );
 
@@ -73,6 +83,8 @@ function Planets() {
         y={y}
         color={planetsConfig[planetName].color}
         planetName={planetName}
+        opacity={visible ? 0.8 : 0.3}
+        borderStyle={ visible ? "solid" : "dashed"}
       />
     );
   });
@@ -84,20 +96,16 @@ function Planets() {
     { name: "W", angle: 270 },
   ];
   const cardinalPointElements = cardinalPoints.map(({ name, angle }) => {
-    const { x, y } = polarToCartesian(
-      mapRadius+20,
-      degreesToRadians(angle)
-    );
-    return (<CardinalPoint mapRadius={mapRadius} x={x} y={y} name={name}  />)
-
-  } )
+    const { x, y } = polarToCartesian(mapRadius + 20, degreesToRadians(angle));
+    return <CardinalPoint mapRadius={mapRadius} x={x} y={y} name={name} />;
+  });
 
   return (
     <div id="map-container">
       <div id="planets-map">
         {planetElements}
         {planetNames}
-        { cardinalPointElements}
+        {cardinalPointElements}
       </div>
     </div>
   );
