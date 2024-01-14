@@ -46,7 +46,7 @@ function Planets() {
 
   const planetElements = planets.map(
     ({ planetName, altitude, azimuth, visible }) => {
-      if (planetsConfig[planetName] === undefined) {
+      if (planetsConfig[planetName] === undefined || !visible) {
         return;
       }
       const { x, y } = polarToCartesian(
@@ -68,7 +68,7 @@ function Planets() {
   );
 
   const planetNames = planets.map(({ planetName, altitude, azimuth, visible }) => {
-    if (planetsConfig[planetName] === undefined) {
+    if (planetsConfig[planetName] === undefined || !visible) {
       return;
     }
     const { x, y } = polarToCartesian(
@@ -81,10 +81,8 @@ function Planets() {
         mapRadius={mapRadius}
         x={x}
         y={y}
-        color={planetsConfig[planetName].color}
         planetName={planetName}
-        opacity={visible ? 0.8 : 0.3}
-        borderStyle={ visible ? "solid" : "dashed"}
+        opacity={0.8}
       />
     );
   });
@@ -96,7 +94,7 @@ function Planets() {
     { name: "W", angle: 270 },
   ];
   const cardinalPointElements = cardinalPoints.map(({ name, angle }) => {
-    const { x, y } = polarToCartesian(mapRadius + 20, degreesToRadians(angle));
+    const { x, y } = polarToCartesian(mapRadius +20, degreesToRadians(angle));
     return <CardinalPoint mapRadius={mapRadius} x={x} y={y} name={name} />;
   });
 

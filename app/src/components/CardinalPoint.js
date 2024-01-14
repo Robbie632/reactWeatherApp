@@ -8,7 +8,8 @@ export function CardinalPoint({ mapRadius, x, y, name }) {
       style={{
         height: height,
         width: width,
-        backgroundColor: "#7899B3",
+        backgroundColor: "black",
+        color: "white",
         borderRadius: 8,
         zIndex: 1,
         bottom: mapRadius - height / 2 + x,
