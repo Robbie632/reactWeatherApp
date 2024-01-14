@@ -8,6 +8,7 @@ export function PlanetName({ mapRadius, x, y, planetName, opacity }) {
       style={{
         color: "white",
         zIndex: 1,
+        fontFamily: "cursive",
         bottom: mapRadius  + x,
         left: mapRadius  + y,
         opacity: 0.8,

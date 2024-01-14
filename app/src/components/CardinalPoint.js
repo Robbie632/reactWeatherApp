@@ -10,6 +10,8 @@ export function CardinalPoint({ mapRadius, x, y, name }) {
         width: width,
         backgroundColor: "black",
         color: "white",
+        fontSize: "2em",
+        fontFamily: "Georgia Serif",
         borderRadius: 8,
         zIndex: 1,
         bottom: mapRadius - height / 2 + x,
