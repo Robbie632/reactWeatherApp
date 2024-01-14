@@ -4,7 +4,49 @@ Hand-activated weath app
 
 run code on raspberry pi (zer0 and above with desktop raspberry OS) connected to internet with ultrasonic sensor attached to GPIO pins and HDMI output to screen
 
-## Python
+## Running with docker
+
+### react service
+
+```
+docker build -t dashboard:latest .
+```
+```
+docker run -p 3000:3000 --volume <absolute path to repo>/reactWeatherApp/app/src:/app/src dashboard:latest 
+```
+App should now hot reload upon changes to code because volume is mapped and nodemon is used in dev script, please bear in mind that you still need to refresh the browser
+
+To stop container get ID of running container using
+```
+docker ps
+```
+Then look up ID of running container and run
+```
+docker stop <container id>
+```
+
+
+### python service
+
+```
+docker build -t sensor:latest .
+```
+```
+docker run -p 8000:8000 --volume <absolute path to repo>/reactWeatherApp/sensors/src:/src sensor:latest 
+```
+App should now hot reload upon changes to code because volume is mapped and nodemon is used in dev script, please bear in mind that you still need to refresh the browser
+
+To stop container get ID of running container using
+```
+docker ps
+```
+Then look up ID of running container and run
+```
+docker stop <container id>
+```
+## running on host
+
+### Python
 * code in sensors/
 * cd sensors
 * mkdir .venv
@@ -15,8 +57,7 @@ run code on raspberry pi (zer0 and above with desktop raspberry OS) connected to
 * python tests.py to run automated unit tests
 * python server.py to set up REST api that reports if sensor in range or not and distance at endpoint ip:port/sensor
 
-
-## React app
+### React app
 * code in app/
 * cd app
 * run npm install to install dependencies
