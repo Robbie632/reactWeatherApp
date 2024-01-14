@@ -1,0 +1,10 @@
+version: '3'
+services:
+  dashboards:
+    build:
+      context: ./app
+    ports:
+      - "3000:3000"
+  sensors:
+    build:
+      context: ./sensors

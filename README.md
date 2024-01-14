@@ -6,6 +6,13 @@ run code on raspberry pi (zer0 and above with desktop raspberry OS) connected to
 
 ## Running with docker
 
+### Using docker compose
+```
+docker compose up
+```
+
+## Using dockerfiles
+
 ### react service
 
 ```
