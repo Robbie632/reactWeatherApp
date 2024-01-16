@@ -1,7 +1,9 @@
-const planetsConfig = {
+export const bearing = 225;
+
+export const planetsConfig = {
   sun: {
     color: "yellow",
-    radius: 50,
+    radius: 55,
   },
   moon: {
     color: "gray",
@@ -9,15 +11,15 @@ const planetsConfig = {
   },
   mercury: {
     color: "#55090D",
-    radius: 30,
+    radius: 15,
   },
   venus: {
     color: "orange",
-    radius: 40,
+    radius: 25,
   },
   mars: {
     color: "red",
-    radius: 35,
+    radius: 20,
   },
   pluto: {
     color: "brown",
@@ -25,20 +27,21 @@ const planetsConfig = {
   },
   jupiter: {
     color: "red",
-    radius: 15,
+    radius: 50,
   },
   uranus: {
     color: "brown",
-    radius: 15,
+    radius: 35,
   },
   saturn: {
     color: "purple",
-    radius: 15,
+    radius: 40,
   },
   neptune: {
     color: "orange",
-    radius: 15,
+    radius: 30,
   },
 };
 
-export default planetsConfig;
+
+

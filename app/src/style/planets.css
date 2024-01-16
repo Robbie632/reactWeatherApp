@@ -8,9 +8,9 @@
   background-color: black;
 }
 #planets-map {
-  width: 620px;
-  height: 620px;
-  border-radius: 310px;
+  width: 360px;
+  height: 360px;
+  border-radius: 180px;
   background-color: #156951;
   z-index: 0;
   position: absolute;

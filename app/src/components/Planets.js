@@ -1,13 +1,12 @@
 import "../style/planets.css";
 import "../style/display.css";
-import planetsConfig from "../configs/planetsConfig";
+import { bearing, planetsConfig } from "../configs/planetsConfig";
 import { Planet } from "./planet";
 import { PlanetName } from "./Planetname";
 import { CardinalPoint } from "./CardinalPoint";
 import {
   degreesToRadians,
   polarToCartesian,
-  getRandomInt,
 } from "../utils/planetEquations";
 
 import React, { useState, useEffect } from "react";
@@ -15,7 +14,8 @@ import React, { useState, useEffect } from "react";
 function Planets() {
   const lat = 51.454514;
   const long = -2.58791;
-  const mapRadius = 310;
+  const mapRadius = 180;
+  const distanceBetweenEarthAndPlanets = 100;
 
   const [planets, setPlanets] = useState([{}]);
 
@@ -50,8 +50,8 @@ function Planets() {
         return;
       }
       const { x, y } = polarToCartesian(
-        mapRadius,
-        degreesToRadians(azimuth)
+        mapRadius + distanceBetweenEarthAndPlanets,
+        degreesToRadians(azimuth - bearing)
       );
 
       return (
@@ -72,8 +72,8 @@ function Planets() {
       return;
     }
     const { x, y } = polarToCartesian(
-      mapRadius + 50,
-      degreesToRadians(azimuth)
+      mapRadius + distanceBetweenEarthAndPlanets + planetsConfig[planetName].radius,
+      degreesToRadians(azimuth - bearing)
     );
 
     return (
@@ -94,7 +94,7 @@ function Planets() {
     { name: "W", angle: 270 },
   ];
   const cardinalPointElements = cardinalPoints.map(({ name, angle }) => {
-    const { x, y } = polarToCartesian(mapRadius +20, degreesToRadians(angle));
+    const { x, y } = polarToCartesian(mapRadius +20, degreesToRadians(angle - bearing));
     return <CardinalPoint mapRadius={mapRadius} x={x} y={y} name={name} />;
   });
 

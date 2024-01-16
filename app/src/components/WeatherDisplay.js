@@ -3,6 +3,8 @@ import "../style/display.css";
 import "../style/weatherdisplay.css";
 import { fetchWeatherApi } from "openmeteo";
 import weatherCodes from "../configs/weatherCodes.js";
+import { thresholds } from "../configs/weatherColorThresholds.js"; 
+import { getTileColor } from "../utils/weather.js";
 import Tile from "./Tile.js";
 import Graph from "./Graph.js";
 import { WiStrongWind } from "react-icons/wi";
@@ -195,6 +197,7 @@ class WeatherDisplay extends Component {
                   ? this.state.rain
                   : Math.round(this.state.rain)
               }
+              color={typeof this.state.rain == "string"? undefined : getTileColor(thresholds.rain.thresholds, Math.round(this.state.rain))}
               unit={"%"}
             />
             <Tile

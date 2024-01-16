@@ -1,10 +1,14 @@
 
 import { IconContext } from "react-icons";
 
-function Tile({ icon, iconSize="4em", value, unit }) {
+function Tile({ icon, iconSize = "4em", value, unit, color = "#BFCFFF" }) {
+  
+  const style = {
+    borderBottom: `10px solid ${color}`
+  }
 
   return (
-    <div className="current-tile tile" id="current-temp">
+    <div className="current-tile tile" id="current-temp" style={style}>
     <IconContext.Provider
       value={{
           size: iconSize,
