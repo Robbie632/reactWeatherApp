@@ -1,0 +1,11 @@
+.borealis {
+  display: flex;
+  flex-direction: column;
+  flex:1;
+  background-color: black;
+  height:100%;
+}
+.borealis-graph {
+  flex:1;
+  width:100%
+}

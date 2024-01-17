@@ -9,9 +9,9 @@ import {
 
 function Graph(props) {
 
-  const { graphHeight, graphWidth, graphMargins, yLabel, data, dataName, domain } = props;
+  const { graphHeight, graphWidth, graphMargins, yLabel, data, dataName, domain, color ="#BFCFFF"} = props;
   return (
-    <div className="tile graph-tile" id="wind-graph">
+    <div className="tile graph-tile" id="wind-graph" style = {{backgroundColor:color}}>
     <ResponsiveContainer width={graphWidth} height={graphHeight}>
       <LineChart
         margin={graphMargins}

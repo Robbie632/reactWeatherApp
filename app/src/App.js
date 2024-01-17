@@ -1,10 +1,11 @@
 import './App.css';
 import WeatherDisplay from "./components/WeatherDisplay";
 import Planets from './components/Planets.js';
+import { Borealis } from './components/borealis/Borealis.js';
 import config from './config.js';
 import React, { useState, useEffect } from "react";
 
-const dashboards = ["planets", "weather"]
+const dashboards = ["planets", "weather", "borealis"]
 
 function App() {
 
@@ -30,6 +31,7 @@ function App() {
       {
           dashboards[displayIndex] === "weather" ? <WeatherDisplay /> :
           dashboards[displayIndex] === "planets" ? <Planets /> :
+          dashboards[displayIndex] === "borealis" ? <Borealis /> :
         "other"}
     </div>
   );
