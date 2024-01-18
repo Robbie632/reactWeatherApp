@@ -19,18 +19,26 @@ function getTileColor(thresholds, value) {
   return selectedColor;
 }
 
-function parseCloudCover(data) {
-  // group data into same day using reduce, exampl ehere https://stackoverflow.com/questions/73253207/typeerror-products-groupby-is-not-a-function
-  // run reduce on each array of same day to get average
-  data = data.map(({date, cloudCover }) => {
+/**
+ * 
+ * groups object by dayMonthYear
+ */
+function groupData(data) {
+  data = data.map(({ date, cloudCover }) => {
     const d = new Date(Date.parse(date));
     const day = d.getDay();
     const dayOfMonth = d.getDate();
     const month = d.getMonth();
     const year = d.getFullYear();
-    
 
-    return { value: cloudCover, day: day, dayOfMonth:dayOfMonth,  month: month, year: year, dayMonthYear: `${dayOfMonth}-${month}-${year}` };
+    return {
+      value: cloudCover,
+      day: day,
+      dayOfMonth: dayOfMonth,
+      month: month,
+      year: year,
+      dayMonthYear: `${dayOfMonth}-${month}-${year}`,
+    };
   });
   const groupedData = data.reduce((x, y) => {
     (x[y.dayMonthYear] = x[y.dayMonthYear] || []).push(y);
@@ -39,8 +47,40 @@ function parseCloudCover(data) {
 
   return groupedData;
 }
+/**
+ * Averages temperature over each day 
+ */
+function aggregatedata(data) {
+
+  const dataAsArray = [];
+  for (const key in data) {
+    dataAsArray.push({
+      dayMonthYear: key,
+      data: data[key],
+    });
+  }
+
+  const aggregated = dataAsArray.map((v) => {
+    const { dayMonthYear } = v;
+    const { data } = v;
+    const count = data.length;
+
+    const valuesSum = data.reduce((x, y) => {
+      return x + y.value;
+    }, 0);
+    const average = valuesSum / count;
+
+    return {
+      dayMonthYear: dayMonthYear,
+      average: average,
+    };
+  });
+
+  return aggregated;
+}
 
 module.exports = {
-  parseCloudCover: parseCloudCover,
+  groupData: groupData,
   getTileColor: getTileColor,
+  aggregatedata: aggregatedata,
 };

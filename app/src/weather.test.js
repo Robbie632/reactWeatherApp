@@ -1,4 +1,4 @@
-const { parseCloudCover } = require("./utils/weather");
+const { groupData, aggregatedata } = require("./utils/weather");
 
 const testData = [
   { date: "2024-01-16T00:00", cloudCover: 51 },
@@ -73,6 +73,6 @@ const testData = [
 ];
 
 test("test", () => {
-  const observed = parseCloudCover(testData);
-  console.log("y");
+  const observed = groupData(testData);
+  const observed2 = aggregatedata(observed);
 });

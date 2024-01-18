@@ -9,7 +9,7 @@ const dashboards = ["planets", "weather", "borealis"]
 
 function App() {
 
-  const [displayIndex, setDisplayIndex] = useState(1);
+  const [displayIndex, setDisplayIndex] = useState(2);
   useEffect(() => {
     const fetchData = async () => {
       try {
