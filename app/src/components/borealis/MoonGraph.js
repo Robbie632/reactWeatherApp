@@ -5,11 +5,12 @@ export function MoonGraph({ latitude, longitude, color }) {
   
   const [moonData, setMoonData] = useState([]);
 
+  const { REACT_APP_VISUAL_CROSSING_KEY } = process.env;
 
   useEffect(() => {
     const fetchData = async (latitude, longitude) => {
   
-      const response = await fetch(`https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${latitude}%2C%20${longitude}?unitGroup=metric&elements=moonphase&include=days&key=6CD6FEE4QN2BL6YV8YNZG5V4S&contentType=json`);
+      const response = await fetch(`https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${latitude}%2C%20${longitude}?unitGroup=metric&elements=moonphase&include=days&key=${REACT_APP_VISUAL_CROSSING_KEY}&contentType=json`);
       const data = await response.json();
       let { days } = data;
       days = days.slice(0, 7);
