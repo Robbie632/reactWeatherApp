@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 export function KpGraph({ latitude, longitude, title, color }) {
   const [kpData, setKpData] = useState([]);
 
+
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch(

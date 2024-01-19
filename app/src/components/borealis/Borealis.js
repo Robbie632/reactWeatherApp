@@ -7,19 +7,18 @@ import { LocationName } from "./LocationName";
 
 export function Borealis() {
   const tileColor = "#BFE3FF";
-  const lat = 51.454514;
-  const long = -2.58791;
-  const latEskilstuna = 59.370571;
-  const longEskilstuna = 16.513590;
-
+  const { REACT_APP_LATITUDE_1 } = process.env;
+  const { REACT_APP_LONGITUDE_1 } = process.env;
+  const { REACT_APP_LATITUDE_2 } = process.env;
+  const { REACT_APP_LONGITUDE_2 } = process.env;
 
   return (
     <div id="first-container">
       <div className="container-0">
         <div className="column borealis">
           <LocationName name="Bristol" color={tileColor} />
-          <CloudCover color={tileColor} latitude={lat} longitude={long} />
-          <MoonGraph color={tileColor} latitude={lat} longitude={long}/>
+          <CloudCover color={tileColor} latitude={REACT_APP_LATITUDE_1} longitude={REACT_APP_LONGITUDE_1} />
+          <MoonGraph color={tileColor} latitude={REACT_APP_LATITUDE_1} longitude={REACT_APP_LONGITUDE_1}/>
         </div>
         <div className="column borealis">
           <KpMap />
@@ -27,8 +26,8 @@ export function Borealis() {
         </div>
         <div className="column borealis">
           <LocationName name="Eskilstuna" color={tileColor} />
-          <CloudCover color={tileColor} latitude={latEskilstuna} longitude={longEskilstuna} />
-          <MoonGraph color={tileColor} latitude={latEskilstuna} longitude={longEskilstuna}/>
+          <CloudCover color={tileColor} latitude={REACT_APP_LATITUDE_2} longitude={REACT_APP_LONGITUDE_2} />
+          <MoonGraph color={tileColor} latitude={REACT_APP_LATITUDE_2} longitude={REACT_APP_LONGITUDE_2}/>
         </div>
       </div>
     </div>

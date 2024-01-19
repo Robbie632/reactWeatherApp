@@ -12,15 +12,15 @@ import {
 import React, { useState, useEffect } from "react";
 
 function Planets() {
-  const lat = 51.454514;
-  const long = -2.58791;
+  const { REACT_APP_LATITUDE_1 } = process.env;
+  const { REACT_APP_LONGITUDE_1 } = process.env;
   const mapRadius = 180;
   const distanceBetweenEarthAndPlanets = 100;
 
   const [planets, setPlanets] = useState([{}]);
 
   useEffect(() => {
-    const url = `https://api.visibleplanets.dev/v3?latitude=${lat}&longitude=${long}`;
+    const url = `https://api.visibleplanets.dev/v3?latitude=${REACT_APP_LATITUDE_1}&longitude=${REACT_APP_LONGITUDE_1}`;
     const fetchData = async () => {
       try {
         const response = await fetch(url);

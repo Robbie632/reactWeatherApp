@@ -1,4 +1,5 @@
 .DS_STORE
+.env
 sensors/.venv
 .vscode
 app/node_modules

@@ -8,8 +8,9 @@ import React, { useState, useEffect } from "react";
 const dashboards = ["planets", "weather", "borealis"]
 
 function App() {
+  console.log(process.env.REACT_APP_TEST);
 
-  const [displayIndex, setDisplayIndex] = useState(0);
+  const [displayIndex, setDisplayIndex] = useState(1);
   useEffect(() => {
     const fetchData = async () => {
       try {
