@@ -9,7 +9,7 @@ const dashboards = ["planets", "weather", "borealis"]
 
 function App() {
 
-  const [displayIndex, setDisplayIndex] = useState(2);
+  const [displayIndex, setDisplayIndex] = useState(0);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -17,10 +17,10 @@ function App() {
         const data = await response.json();
         const inRange = data.inRange;
         if (inRange === 1) { 
-          setDisplayIndex((prev) => prev === dashboards.length-1 ? 0 : 1);
+          setDisplayIndex((prev) => prev === dashboards.length-1 ? 0 : prev+1);
         }        
-      } catch {
-        console.log("error getting sensor data");
+      } catch(e) {
+        console.log(`error getting sensor data: ${e}`);
       }
     }
     setInterval(() => fetchData(), config.fetchSensorInterval);

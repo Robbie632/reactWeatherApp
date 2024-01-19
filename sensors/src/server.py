@@ -1,7 +1,7 @@
 from flask import Flask, jsonify
 from utils import Sensor
-#import RPi.GPIO as GPIO
-from mocks import GPIO
+import RPi.GPIO as GPIO
+#from mocks import GPIO
 
 gpio_echo = 14
 gpio_trigger = 15
