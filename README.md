@@ -20,7 +20,7 @@ fill out app/config.json
 
 ### Using docker compose
 ```
-docker compose up
+docker-compose up
 ```
 
 ## Using dockerfiles
