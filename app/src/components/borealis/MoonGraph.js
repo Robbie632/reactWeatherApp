@@ -5,21 +5,24 @@ export function MoonGraph({ latitude, longitude, color }) {
   
   const [moonData, setMoonData] = useState([]);
 
+
   useEffect(() => {
     const fetchData = async (latitude, longitude) => {
+  
       const response = await fetch(`https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${latitude}%2C%20${longitude}?unitGroup=metric&elements=moonphase&include=days&key=6CD6FEE4QN2BL6YV8YNZG5V4S&contentType=json`);
       const data = await response.json();
       let { days } = data;
       days = days.slice(0, 7);
+      const  now = new Date(Date.now());
       const newMoonData = days.map(({ moonphase}, index) => {
         return (
           {
-            name: index,
+            name: index + now.getDate(),
             moonCover:moonphase
           }
         )
       }) 
-      setMoonData((prev) => setMoonData(newMoonData))
+      setMoonData((prev) => newMoonData)
     }
     fetchData(latitude, longitude);
   }, [])
