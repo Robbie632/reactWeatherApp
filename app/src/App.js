@@ -5,7 +5,7 @@ import { Borealis } from './components/borealis/Borealis.js';
 import config from './config.js';
 import React, { useState, useEffect } from "react";
 
-const dashboards = ["planets", "weather", "borealis"]
+const dashboards = ["weather", "planets", "borealis"]
 
 function App() {
 

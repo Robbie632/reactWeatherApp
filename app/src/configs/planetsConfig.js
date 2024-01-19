@@ -1,4 +1,4 @@
-export const bearing = 0;
+export const bearing = 233;
 
 export const planetsConfig = {
   sun: {
