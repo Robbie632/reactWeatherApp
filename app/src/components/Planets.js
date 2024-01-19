@@ -41,7 +41,7 @@ function Planets() {
         console.log("error calling planets api");
       }
     };
-    setTimeout(fetchData, 1000);
+    fetchData();
   }, []);
 
   const planetElements = planets.map(

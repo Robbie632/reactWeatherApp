@@ -161,8 +161,8 @@ class WeatherDisplay extends Component {
   };
 
   componentDidMount() {
-    setTimeout(this.getPollen, 2000);
-    setTimeout(this.getWeather, 2000);
+    this.getPollen();
+    this.getWeather();
   }
 
   render() {
